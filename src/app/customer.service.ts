@@ -16,4 +16,10 @@ export class CustomerService {
     this.messageService.add("CustomerService: fetched customers");
     return of(CUSTOMERS);
   }
+
+  getCustomer(id: number): Observable<Customer> {
+    // Todo: send the message _after_ fetching the customer
+    this.messageService.add(`HeroService: fetched hero id=${id}`);
+    return of(CUSTOMERS.find(c => c.id === id));
+  }
 }
