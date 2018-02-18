@@ -7,10 +7,11 @@ import { CustomerService } from './customer.service';
 
 describe('CustomerService', () => {
   beforeEach(() => {
+    let messageServiceStub = { add: function(msg: string) {}, clear: function() {} };
     TestBed.configureTestingModule({
       providers: [
         { provide: HttpClient, deps: [MockBackend] },
-        MessageService,
+        { provide: MessageService, useValue: messageServiceStub },
         CustomerService
       ]
     });
