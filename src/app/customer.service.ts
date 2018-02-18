@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { catchError, map, tap } from "rxjs/operators";
 
-import { Customer } from './customer';
+import { Customer } from "./customer";
 
 import { MessageService } from "./message.service";
 
@@ -49,6 +49,31 @@ export class CustomerService {
       .pipe(
         tap(_ => this.log(`updated customer id=${customer.id}`)),
         catchError(this.handleError<any>("updateCustomer"))
+      );
+  }
+
+  /** POST: add a new customer to the server */
+  addCustomer(customer: Customer): Observable<Customer> {
+    return this.http
+      .post<Customer>(this.customersUrl, customer, httpOptions)
+      .pipe(
+        tap((customer: Customer) =>
+          this.log(`added hero w/ id=${customer.id}`)
+        ),
+        catchError(this.handleError<Customer>("addCustomer"))
+      );
+  }
+
+  /** DELETE: delete the customer from the server */
+  deleteCustomer(customer: Customer | number): Observable<Customer> {
+    const id = typeof customer === "number" ? customer : customer.id;
+    const url = `${this.customersUrl}/${id}`;
+
+    return this.http
+      .delete<Customer>(url, httpOptions)
+      .pipe(
+        tap(_ => this.log(`deleted customer id=${id}`)),
+        catchError(this.handleError<Customer>("deleteCustomer"))
       );
   }
 
