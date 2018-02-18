@@ -77,6 +77,20 @@ export class CustomerService {
       );
   }
 
+  /* GET customers whose name contains search term */
+  searchCustomers(term: string): Observable<Customer[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    return this.http
+      .get<Customer[]>(`api/customers/?name=${term}`)
+      .pipe(
+        tap(_ => this.log(`found customers matching "${term}"`)),
+        catchError(this.handleError<Customer[]>("searchCustomers", []))
+      );
+  }
+
   private log(message: string) {
     this.messageService.add("CustomerService: " + message);
   }
