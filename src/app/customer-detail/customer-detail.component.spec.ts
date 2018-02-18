@@ -1,17 +1,31 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormsModule } from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
 
-import { CustomerDetailComponent } from './customer-detail.component';
+import { of } from "rxjs/observable/of";
 
-describe('CustomerDetailComponent', () => {
+import { CustomerService } from "../customer.service";
+
+import { CustomerDetailComponent } from "./customer-detail.component";
+
+describe("CustomerDetailComponent", () => {
   let component: CustomerDetailComponent;
   let fixture: ComponentFixture<CustomerDetailComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CustomerDetailComponent ]
+  beforeEach(
+    async(() => {
+      let customerServiceStub = {
+        getCustomer: function(id) {
+          return of();
+        }
+      };
+      TestBed.configureTestingModule({
+        declarations: [CustomerDetailComponent],
+        imports: [FormsModule, RouterTestingModule.withRoutes([])],
+        providers: [{ provide: CustomerService, useValue: customerServiceStub }]
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CustomerDetailComponent);
@@ -19,7 +33,7 @@ describe('CustomerDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
